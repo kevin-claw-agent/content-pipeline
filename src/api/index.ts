@@ -1,5 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
-import { createEpisode, getEpisodeStatus, listEpisodes } from './orchestrator';
+import { createEpisode, getEpisodeStatus, listEpisodes, pg } from '../orchestrator';
 
 const app = express();
 app.use(express.json());
@@ -37,6 +38,81 @@ app.get('/episodes/:id', async (req, res) => {
   } catch (error) {
     console.error('Error getting episode:', error);
     res.status(500).json({ error: 'Failed to get episode' });
+  }
+});
+
+// Get all assets for an episode
+app.get('/episodes/:id/assets', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Check if episode exists
+    const episodeRes = await pg.query('SELECT * FROM episodes WHERE id = $1', [id]);
+    if (episodeRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Episode not found' });
+    }
+
+    // Get all assets
+    const assetsRes = await pg.query(
+      `SELECT a.*, j.stage as job_stage, j.status as job_status 
+       FROM assets a 
+       LEFT JOIN jobs j ON a.job_id = j.id 
+       WHERE a.episode_id = $1 
+       ORDER BY a.created_at`,
+      [id]
+    );
+
+    // Group by type
+    const assetsByType: Record<string, any[]> = {};
+    for (const asset of assetsRes.rows) {
+      if (!assetsByType[asset.type]) {
+        assetsByType[asset.type] = [];
+      }
+      assetsByType[asset.type].push(asset);
+    }
+
+    res.json({
+      episodeId: id,
+      totalAssets: assetsRes.rows.length,
+      assetsByType,
+      assets: assetsRes.rows
+    });
+  } catch (error) {
+    console.error('Error getting assets:', error);
+    res.status(500).json({ error: 'Failed to get assets' });
+  }
+});
+
+// Delete an episode and all its data
+app.delete('/episodes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Check if episode exists
+    const episodeRes = await pg.query('SELECT * FROM episodes WHERE id = $1', [id]);
+    if (episodeRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Episode not found' });
+    }
+
+    // Get all assets for deletion from storage (optional cleanup)
+    const assetsRes = await pg.query('SELECT uri FROM assets WHERE episode_id = $1', [id]);
+    const uris = assetsRes.rows.map(row => row.uri);
+    
+    // Delete episode (cascades to jobs and assets due to foreign keys)
+    await pg.query('DELETE FROM episodes WHERE id = $1', [id]);
+
+    // TODO: Optionally delete files from S3/MinIO
+    // await deleteEpisodeFiles(uris);
+
+    res.json({ 
+      success: true, 
+      message: 'Episode deleted successfully',
+      episodeId: id,
+      deletedAssets: uris.length
+    });
+  } catch (error) {
+    console.error('Error deleting episode:', error);
+    res.status(500).json({ error: 'Failed to delete episode' });
   }
 });
 
