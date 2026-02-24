@@ -2,7 +2,12 @@ import { Queue, Worker, Job } from 'bullmq';
 import Redis from 'ioredis';
 import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
-import { config } from './config';
+import { config } from '../config';
+
+// Load environment variables
+try {
+  require('dotenv').config();
+} catch { /* ignore if dotenv not installed */ }
 
 // Redis connection
 const redis = new Redis(config.redisUrl);
@@ -12,7 +17,7 @@ const pg = new Pool({ connectionString: config.databaseUrl });
 
 // Job queues for each stage
 const scriptQueue = new Queue('script-generation', { connection: redis });
-const visualQueue = new Queue('visual-generation', { connection: redis });
+const visualQueue = new Queue('storyboard-generation', { connection: redis });
 const renderQueue = new Queue('render-generation', { connection: redis });
 const composeQueue = new Queue('video-composition', { connection: redis });
 

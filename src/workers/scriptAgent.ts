@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Worker, Job } from 'bullmq';
 import { pg, redis, progressToNextStage } from '../orchestrator';
 import { callLLM } from '../utils/llm';
