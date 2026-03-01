@@ -3,326 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Pipeline - AI 短剧生产流水线</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Content Pipeline - AI 短剧自动生产流水线</title>
+    <meta name="description" content="AI-powered short video content pipeline - 从故事梗概到完整视频的全流程自动化生成">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <span class="logo">🎬</span>
-            <span class="brand-text">Content Pipeline</span>
+    <!-- Background Effects -->
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-brand">
+                <span class="logo">🎬</span>
+                <span class="brand-text">Content Pipeline</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#features" class="nav-link">功能</a>
+                <a href="#architecture" class="nav-link">架构</a>
+                <a href="#tech-stack" class="nav-link">技术栈</a>
+                <a href="#installation" class="nav-link">安装</a>
+                <a href="#docs" class="nav-link">文档</a>
+                <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank" class="nav-link nav-github">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        <div class="nav-links">
-            <a href="#home" class="active">首页</a>
-            <a href="#demo">在线演示</a>
-            <a href="#examples">示例库</a>
-            <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank">GitHub</a>
-        </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </nav>
 
     <main>
         <!-- Hero Section -->
-        <section id="home" class="hero">
+        <section class="hero" id="home">
             <div class="container">
                 <div class="hero-content">
-                    <h1>AI 短剧自动生产流水线</h1>
-                    <p class="hero-subtitle">从故事梗概到完整视频，全流程自动化生成</p>
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        <span>AI-Powered Content Creation</span>
+                    </div>
+                    <h1 class="hero-title">
+                        AI 短剧<br>
+                        <span class="gradient-text">自动生产流水线</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        从故事梗概到完整视频，全流程自动化生成。<br>
+                        脚本创作、分镜设计、视频渲染、智能合成 —— 一站式 AI 短剧解决方案。
+                    </p>
                     <div class="hero-actions">
-                        <a href="#demo" class="btn btn-primary">🚀 立即体验</a>
-                        <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank" class="btn btn-secondary">📖 查看文档</a>
+                        <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank" class="btn btn-primary">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            </svg>
+                            查看源码
+                        </a>
+                        <a href="#installation" class="btn btn-secondary">
+                            快速开始
+                        </a>
                     </div>
                 </div>
                 <div class="hero-visual">
-                    <div class="pipeline-preview">
-                        <div class="stage-card">
+                    <div class="pipeline-flow">
+                        <div class="flow-stage" data-stage="script">
+                            <div class="stage-glow"></div>
                             <div class="stage-icon">📝</div>
-                            <div class="stage-name">Script</div>
+                            <div class="stage-info">
+                                <div class="stage-name">Script</div>
+                                <div class="stage-desc">脚本生成</div>
+                            </div>
                         </div>
-                        <div class="arrow">→</div>
-                        <div class="stage-card">
+                        <div class="flow-arrow">
+                            <svg width="40" height="24" viewBox="0 0 40 24">
+                                <defs>
+                                    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.5" />
+                                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0 12h30M25 6l6 6-6 6" stroke="url(#arrowGrad)" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="flow-stage" data-stage="visual">
+                            <div class="stage-glow"></div>
                             <div class="stage-icon">🎨</div>
-                            <div class="stage-name">Storyboard</div>
+                            <div class="stage-info">
+                                <div class="stage-name">Visual</div>
+                                <div class="stage-desc">分镜设计</div>
+                            </div>
                         </div>
-                        <div class="arrow">→</div>
-                        <div class="stage-card">
+                        <div class="flow-arrow">
+                            <svg width="40" height="24" viewBox="0 0 40 24">
+                                <path d="M0 12h30M25 6l6 6-6 6" stroke="url(#arrowGrad)" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="flow-stage" data-stage="render">
+                            <div class="stage-glow"></div>
                             <div class="stage-icon">🎥</div>
-                            <div class="stage-name">Render</div>
+                            <div class="stage-info">
+                                <div class="stage-name">Render</div>
+                                <div class="stage-desc">视频渲染</div>
+                            </div>
                         </div>
-                        <div class="arrow">→</div>
-                        <div class="stage-card">
+                        <div class="flow-arrow">
+                            <svg width="40" height="24" viewBox="0 0 40 24">
+                                <path d="M0 12h30M25 6l6 6-6 6" stroke="url(#arrowGrad)" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="flow-stage" data-stage="compose">
+                            <div class="stage-glow"></div>
                             <div class="stage-icon">✨</div>
-                            <div class="stage-name">Compose</div>
+                            <div class="stage-info">
+                                <div class="stage-name">Compose</div>
+                                <div class="stage-desc">智能合成</div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">AI Agents</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value">0→1</div>
+                            <div class="stat-label">全自动</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value">MIT</div>
+                            <div class="stat-label">开源协议</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="scroll-mouse">
+                    <div class="scroll-wheel"></div>
+                </div>
+                <span>向下滚动</span>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">核心功能</span>
+                    <h2 class="section-title">四大智能模块<br>覆盖完整生产链路</h2>
+                    <p class="section-desc">每个阶段都由专门的 AI Agent 负责，协同完成从创意到成品的全流程</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card" data-feature="script">
+                        <div class="feature-glow"></div>
+                        <div class="feature-icon">
+                            <span>📝</span>
+                        </div>
+                        <h3 class="feature-title">ScriptAgent</h3>
+                        <p class="feature-desc">
+                            将故事梗概转化为完整剧本。自动规划场景结构、对话内容、旁白文案，
+                            并根据目标时长智能调整内容密度。
+                        </p>
+                        <ul class="feature-list">
+                            <li>智能场景规划</li>
+                            <li>对话与旁白生成</li>
+                            <li>时长自适应调整</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card" data-feature="visual">
+                        <div class="feature-glow"></div>
+                        <div class="feature-icon">
+                            <span>🎨</span>
+                        </div>
+                        <h3 class="feature-title">VisualAgent</h3>
+                        <p class="feature-desc">
+                            基于剧本生成分镜设计。将文字转化为画面描述、镜头角度、视觉风格指导，
+                            为视频渲染提供详细的视觉蓝图。
+                        </p>
+                        <ul class="feature-list">
+                            <li>画面描述生成</li>
+                            <li>镜头语言设计</li>
+                            <li>视觉风格统一</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card" data-feature="render">
+                        <div class="feature-glow"></div>
+                        <div class="feature-icon">
+                            <span>🎥</span>
+                        </div>
+                        <h3 class="feature-title">RenderAgent</h3>
+                        <p class="feature-desc">
+                            将分镜转化为视频片段。并行渲染多个场景，自动处理画面生成、
+                            转场效果和基础后期处理。
+                        </p>
+                        <ul class="feature-list">
+                            <li>并行视频渲染</li>
+                            <li>智能场景转换</li>
+                            <li>批量片段生成</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card" data-feature="compose">
+                        <div class="feature-glow"></div>
+                        <div class="feature-icon">
+                            <span>✨</span>
+                        </div>
+                        <h3 class="feature-title">Composer</h3>
+                        <p class="feature-desc">
+                            最终视频合成与输出。智能拼接片段、添加背景音乐、生成字幕、
+                            调整节奏，输出完整成品视频。
+                        </p>
+                        <ul class="feature-list">
+                            <li>智能片段拼接</li>
+                            <li>音频与字幕合成</li>
+                            <li>成品视频输出</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Architecture Section -->
-        <section class="architecture">
+        <section class="architecture" id="architecture">
             <div class="container">
-                <h2>系统架构</h2>
+                <div class="section-header">
+                    <span class="section-tag">系统架构</span>
+                    <h2 class="section-title">分布式任务调度<br>高并发流水线处理</h2>
+                    <p class="section-desc">模块化设计，支持水平扩展，确保稳定高效的批量内容生产</p>
+                </div>
                 <div class="arch-diagram">
+                    <!-- User Layer -->
                     <div class="arch-layer">
-                        <div class="arch-box api">REST API</div>
+                        <div class="arch-node arch-user">
+                            <div class="arch-icon">👤</div>
+                            <div class="arch-label">User</div>
+                        </div>
                     </div>
-                    <div class="arch-arrows">
-                        <span>↕</span>
+                    <div class="arch-connector">
+                        <div class="connector-line"></div>
                     </div>
+                    
+                    <!-- API Layer -->
                     <div class="arch-layer">
-                        <div class="arch-box orchestrator">Orchestrator</div>
+                        <div class="arch-node arch-api">
+                            <div class="arch-icon">🌐</div>
+                            <div class="arch-label">REST API</div>
+                            <div class="arch-tech">Express.js</div>
+                        </div>
                     </div>
-                    <div class="arch-arrows">
-                        <span>↔</span>
+                    <div class="arch-connector">
+                        <div class="connector-line"></div>
                     </div>
-                    <div class="arch-layer workers">
-                        <div class="arch-box worker">ScriptAgent</div>
-                        <div class="arch-box worker">VisualAgent</div>
-                        <div class="arch-box worker">RenderAgent</div>
-                        <div class="arch-box worker">Composer</div>
+                    
+                    <!-- Orchestrator Layer -->
+                    <div class="arch-layer">
+                        <div class="arch-node arch-orchestrator">
+                            <div class="arch-icon">🎯</div>
+                            <div class="arch-label">Orchestrator</div>
+                            <div class="arch-tech">任务调度器</div>
+                        </div>
                     </div>
-                    <div class="arch-arrows">
-                        <span>↕</span>
+                    <div class="arch-connector">
+                        <div class="connector-line"></div>
                     </div>
-                    <div class="arch-layer storage">
-                        <div class="arch-box storage-box">PostgreSQL</div>
-                        <div class="arch-box storage-box">Redis / BullMQ</div>
-                        <div class="arch-box storage-box">S3 / MinIO</div>
+                    
+                    <!-- Queue Layer -->
+                    <div class="arch-layer">
+                        <div class="arch-node arch-queue">
+                            <div class="arch-icon">⚡</div>
+                            <div class="arch-label">BullMQ</div>
+                            <div class="arch-tech">Redis Queue</div>
+                        </div>
+                    </div>
+                    <div class="arch-connector">
+                        <div class="connector-line"></div>
+                    </div>
+                    
+                    <!-- Workers Layer -->
+                    <div class="arch-layer workers-row">
+                        <div class="arch-node arch-worker">
+                            <div class="arch-icon">📝</div>
+                            <div class="arch-label">ScriptAgent</div>
+                        </div>
+                        <div class="arch-node arch-worker">
+                            <div class="arch-icon">🎨</div>
+                            <div class="arch-label">VisualAgent</div>
+                        </div>
+                        <div class="arch-node arch-worker">
+                            <div class="arch-icon">🎥</div>
+                            <div class="arch-label">RenderAgent</div>
+                        </div>
+                        <div class="arch-node arch-worker">
+                            <div class="arch-icon">✨</div>
+                            <div class="arch-label">Composer</div>
+                        </div>
+                    </div>
+                    <div class="arch-connector">
+                        <div class="connector-line multi"></div>
+                    </div>
+                    
+                    <!-- Storage Layer -->
+                    <div class="arch-layer storage-row">
+                        <div class="arch-node arch-storage">
+                            <div class="arch-icon">🗄️</div>
+                            <div class="arch-label">PostgreSQL</div>
+                            <div class="arch-tech">State</div>
+                        </div>
+                        <div class="arch-node arch-storage">
+                            <div class="arch-icon">🪣</div>
+                            <div class="arch-label">S3 / MinIO</div>
+                            <div class="arch-tech">Assets</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-features">
+                    <div class="arch-feature-item">
+                        <div class="arch-feature-icon">🔄</div>
+                        <div class="arch-feature-text">
+                            <strong>状态持久化</strong>
+                            <span>PostgreSQL 存储所有任务状态</span>
+                        </div>
+                    </div>
+                    <div class="arch-feature-item">
+                        <div class="arch-feature-icon">📦</div>
+                        <div class="arch-feature-text">
+                            <strong>对象存储</strong>
+                            <span>S3/MinIO 管理生成的资源文件</span>
+                        </div>
+                    </div>
+                    <div class="arch-feature-item">
+                        <div class="arch-feature-icon">⚡</div>
+                        <div class="arch-feature-text">
+                            <strong>队列管理</strong>
+                            <span>BullMQ 确保任务可靠执行</span>
+                        </div>
+                    </div>
+                    <div class="arch-feature-item">
+                        <div class="arch-feature-icon">🐳</div>
+                        <div class="arch-feature-text">
+                            <strong>容器化部署</strong>
+                            <span>Docker Compose 一键启动</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Tech Stack Section -->
-        <section class="tech-stack">
+        <section class="tech-stack" id="tech-stack">
             <div class="container">
-                <h2>技术栈</h2>
+                <div class="section-header">
+                    <span class="section-tag">技术栈</span>
+                    <h2 class="section-title">现代化技术选型<br>构建高性能系统</h2>
+                </div>
                 <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">⚡</div>
-                        <h3>Node.js + TypeScript</h3>
-                        <p>高性能后端服务，类型安全的代码</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">Runtime</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #339933;">Node</div>
+                                <span class="tech-name">Node.js</span>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #3178c6;">TS</div>
+                                <span class="tech-name">TypeScript</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🎯</div>
-                        <h3>Express.js</h3>
-                        <p>RESTful API 框架</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">API & Web</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #000000;">Ex</div>
+                                <span class="tech-name">Express.js</span>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #E535AB;">GQL</div>
+                                <span class="tech-name">REST API</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📊</div>
-                        <h3>PostgreSQL</h3>
-                        <p>关系型数据库，持久化存储</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">Queue & Cache</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #DC382D;">🐂</div>
+                                <span class="tech-name">BullMQ</span>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #DC382D;">Re</div>
+                                <span class="tech-name">Redis</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">⚙️</div>
-                        <h3>BullMQ</h3>
-                        <p>分布式任务队列，基于 Redis</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">Database</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #336791;">Pg</div>
+                                <span class="tech-name">PostgreSQL</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🪣</div>
-                        <h3>MinIO / S3</h3>
-                        <p>对象存储，资源文件管理</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">Storage</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #C72C48;">S3</div>
+                                <span class="tech-name">AWS S3</span>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #C72C48;">Mn</div>
+                                <span class="tech-name">MinIO</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🐳</div>
-                        <h3>Docker</h3>
-                        <p>容器化部署，环境一致性</p>
+                    <div class="tech-category">
+                        <h3 class="tech-category-title">DevOps</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #2496ED;">🐳</div>
+                                <span class="tech-name">Docker</span>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-logo" style="background: #2496ED;">⚓</div>
+                                <span class="tech-name">Compose</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Quick Start Section -->
-        <section class="quick-start">
+        <!-- Installation Section -->
+        <section class="installation" id="installation">
             <div class="container">
-                <h2>快速开始</h2>
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <button class="copy-btn" data-clipboard="# Clone 仓库
-git clone https://github.com/kevin-claw-agent/content-pipeline.git
-cd content-pipeline
-
-# 启动依赖服务
-docker-compose -f docker/docker-compose.yml up -d
-
-# 安装依赖并启动
-npm install
-npm run dev
-
-# 启动所有 Worker
-npm run workers">📋 复制</button>
-                    </div>
-                    <pre><code># Clone 仓库
-git clone https://github.com/kevin-claw-agent/content-pipeline.git
-cd content-pipeline
-
-# 启动依赖服务
-docker-compose -f docker/docker-compose.yml up -d
-
-# 安装依赖并启动
-npm install
-npm run dev
-
-# 启动所有 Worker
-npm run workers</code></pre>
+                <div class="section-header">
+                    <span class="section-tag">快速开始</span>
+                    <h2 class="section-title">简单几步<br>启动你的流水线</h2>
                 </div>
-            </div>
-        </section>
-
-        <!-- Demo Section -->
-        <section id="demo" class="demo-section">
-            <div class="container">
-                <h2>在线演示</h2>
-                <p class="section-desc">输入故事梗概，观看 AI 自动生成短剧的全过程</p>
-                
-                <div class="demo-form">
-                    <div class="form-group">
-                        <label for="episodeTitle">短剧标题（可选）</label>
-                        <input type="text" id="episodeTitle" placeholder="例如：咖啡馆奇缘">
-                    </div>
-                    <div class="form-group">
-                        <label for="episodePremise">故事梗概 <span class="required">*</span></label>
-                        <textarea id="episodePremise" rows="4" placeholder="描述你的故事：两个陌生人在咖啡馆相遇，因为一本书而结缘..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="targetDuration">目标时长（秒）</label>
-                        <input type="number" id="targetDuration" value="30" min="15" max="120">
-                    </div>
-                    <button id="startBtn" class="btn btn-primary btn-large">
-                        <span class="btn-icon">🚀</span>
-                        开始生成
-                    </button>
-                </div>
-
-                <!-- Progress Panel -->
-                <div id="progressPanel" class="progress-panel hidden">
-                    <div class="panel-header">
-                        <h3>生成进度</h3>
-                        <span id="episodeId" class="episode-id"></span>
-                    </div>
-                    
-                    <div class="overall-progress">
-                        <div class="progress-bar">
-                            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span id="progressPercent" class="progress-percent">0%</span>
-                    </div>
-
-                    <div class="stage-timeline">
-                        <div class="stage-item" data-stage="script">
-                            <div class="stage-status pending">⏳</div>
-                            <div class="stage-info">
-                                <div class="stage-name">脚本生成</div>
-                                <div class="stage-desc">ScriptAgent 编写完整剧本</div>
+                <div class="install-content">
+                    <div class="install-steps">
+                        <div class="step-item">
+                            <div class="step-number">01</div>
+                            <div class="step-content">
+                                <h3>克隆仓库</h3>
+                                <p>获取项目源码到本地</p>
                             </div>
                         </div>
-                        <div class="stage-item" data-stage="storyboard">
-                            <div class="stage-status pending">⏳</div>
-                            <div class="stage-info">
-                                <div class="stage-name">分镜设计</div>
-                                <div class="stage-desc">VisualAgent 生成画面描述</div>
+                        <div class="step-item">
+                            <div class="step-number">02</div>
+                            <div class="step-content">
+                                <h3>启动依赖</h3>
+                                <p>Docker Compose 一键启动 PostgreSQL、Redis、MinIO</p>
                             </div>
                         </div>
-                        <div class="stage-item" data-stage="render">
-                            <div class="stage-status pending">⏳</div>
-                            <div class="stage-info">
-                                <div class="stage-name">视频渲染</div>
-                                <div class="stage-desc">RenderAgent 创建视频片段</div>
+                        <div class="step-item">
+                            <div class="step-number">03</div>
+                            <div class="step-content">
+                                <h3>配置环境</h3>
+                                <p>复制 .env.example 并配置 API Keys</p>
                             </div>
                         </div>
-                        <div class="stage-item" data-stage="compose">
-                            <div class="stage-status pending">⏳</div>
-                            <div class="stage-info">
-                                <div class="stage-name">最终合成</div>
-                                <div class="stage-desc">Composer 组装完整视频</div>
+                        <div class="step-item">
+                            <div class="step-number">04</div>
+                            <div class="step-content">
+                                <h3>启动服务</h3>
+                                <p>运行 API 服务和 Worker 进程</p>
                             </div>
                         </div>
                     </div>
+                    <div class="install-code">
+                        <div class="code-header">
+                            <span class="code-title">Terminal</span>
+                            <button class="copy-btn" id="copyBtn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                复制
+                            </button>
+                        </div>
+                        <pre class="code-block"><code><span class="code-comment"># 克隆仓库</span>
+<span class="code-command">git clone</span> https://github.com/kevin-claw-agent/content-pipeline.git
+<span class="code-command">cd</span> content-pipeline
 
-                    <div id="previewPanel" class="preview-panel hidden">
-                        <h4>阶段预览</h4>
-                        <div id="previewContent" class="preview-content"></div>
+<span class="code-comment"># 启动依赖服务</span>
+<span class="code-command">docker-compose</span> -f docker/docker-compose.yml up -d
+
+<span class="code-comment"># 安装依赖</span>
+<span class="code-command">npm</span> install
+
+<span class="code-comment"># 配置环境变量</span>
+<span class="code-command">cp</span> .env.example .env
+<span class="code-comment"># 编辑 .env 配置你的 API Keys</span>
+
+<span class="code-comment"># 启动 API 服务</span>
+<span class="code-command">npm run</span> dev
+
+<span class="code-comment"># 新终端：启动所有 Worker</span>
+<span class="code-command">npm run</span> workers</code></pre>
                     </div>
                 </div>
+                <div class="api-example">
+                    <h3 class="api-title">API 使用示例</h3>
+                    <div class="code-block-wrapper">
+                        <pre class="code-block"><code><span class="code-comment"># 创建 Episode</span>
+<span class="code-command">curl</span> -X POST http://localhost:3000/episodes \
+  -H <span class="code-string">"Content-Type: application/json"</span> \
+  -d <span class="code-string">'{
+    "title": "我的短剧",
+    "premise": "一个关于勇气的故事...",
+    "targetDuration": 30
+  }'</span>
 
-                <!-- Result Panel -->
-                <div id="resultPanel" class="result-panel hidden">
-                    <div class="success-icon">🎉</div>
-                    <h3>生成完成！</h3>
-                    <p>你的短剧已经准备好啦</p>
-                    <div class="result-actions">
-                        <button id="viewAssetsBtn" class="btn btn-secondary">查看资源</button>
-                        <button id="newEpisodeBtn" class="btn btn-primary">创建新剧集</button>
+<span class="code-comment"># 查询状态</span>
+<span class="code-command">curl</span> http://localhost:3000/episodes/{episode-id}</code></pre>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Examples Section -->
-        <section id="examples" class="examples-section">
+        <!-- Documentation Section -->
+        <section class="documentation" id="docs">
             <div class="container">
-                <h2>示例库</h2>
-                <p class="section-desc">点击任意示例，快速体验流水线</p>
-                
-                <div class="examples-grid">
-                    <div class="example-card" data-example="romance">
-                        <div class="example-icon">💕</div>
-                        <h3>爱情故事</h3>
-                        <p>咖啡馆偶遇，一本旧书牵起的浪漫邂逅</p>
-                        <button class="btn btn-small">运行示例</button>
-                    </div>
-                    <div class="example-card" data-example="mystery">
-                        <div class="example-icon">🕵️</div>
-                        <h3>悬疑推理</h3>
-                        <p>午夜来电，失踪的邻居留下的神秘线索</p>
-                        <button class="btn btn-small">运行示例</button>
-                    </div>
-                    <div class="example-card" data-example="scifi">
-                        <div class="example-icon">🚀</div>
-                        <h3>科幻冒险</h3>
-                        <p>时空旅人，改变过去的代价</p>
-                        <button class="btn btn-small">运行示例</button>
-                    </div>
-                    <div class="example-card" data-example="comedy">
-                        <div class="example-icon">😂</div>
-                        <h3>喜剧短片</h3>
-                        <p>宠物大作战，狗狗们的秘密计划</p>
-                        <button class="btn btn-small">运行示例</button>
-                    </div>
-                    <div class="example-card" data-example="horror">
-                        <div class="example-icon">👻</div>
-                        <h3>惊悚悬疑</h3>
-                        <p>老宅探险，镜子里的人影</p>
-                        <button class="btn btn-small">运行示例</button>
-                    </div>
+                <div class="section-header">
+                    <span class="section-tag">文档</span>
+                    <h2 class="section-title">了解更多<br>深入使用指南</h2>
+                </div>
+                <div class="docs-grid">
+                    <a href="https://github.com/kevin-claw-agent/content-pipeline#readme" target="_blank" class="doc-card">
+                        <div class="doc-icon">📖</div>
+                        <h3 class="doc-title">项目 README</h3>
+                        <p class="doc-desc">快速了解项目概述、功能特性和基本用法</p>
+                        <span class="doc-link">查看文档 →</span>
+                    </a>
+                    <a href="https://github.com/kevin-claw-agent/content-pipeline/tree/main/docs" target="_blank" class="doc-card">
+                        <div class="doc-icon">📚</div>
+                        <h3 class="doc-title">详细文档</h3>
+                        <p class="doc-desc">架构设计、API 参考、配置指南和最佳实践</p>
+                        <span class="doc-link">查看文档 →</span>
+                    </a>
+                    <a href="https://github.com/kevin-claw-agent/content-pipeline/tree/main/examples" target="_blank" class="doc-card">
+                        <div class="doc-icon">💡</div>
+                        <h3 class="doc-title">示例代码</h3>
+                        <p class="doc-desc">各种使用场景的示例代码和模板</p>
+                        <span class="doc-link">查看示例 →</span>
+                    </a>
+                    <a href="https://github.com/kevin-claw-agent/content-pipeline/issues" target="_blank" class="doc-card">
+                        <div class="doc-icon">🐛</div>
+                        <h3 class="doc-title">问题反馈</h3>
+                        <p class="doc-desc">遇到问题？提交 Issue 获取帮助</p>
+                        <span class="doc-link">提交 Issue →</span>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
+        <!-- CTA Section -->
+        <section class="cta">
             <div class="container">
-                <p>Content Pipeline - AI 短剧自动生产流水线</p>
-                <p class="footer-links">
-                    <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank">GitHub</a>
-                    <span>•</span>
-                    <a href="#home">回到顶部</a>
-                </p>
+                <div class="cta-content">
+                    <h2 class="cta-title">准备好开始了吗？</h2>
+                    <p class="cta-desc">立即克隆仓库，体验 AI 驱动的内容生产流水线</p>
+                    <div class="cta-actions">
+                        <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank" class="btn btn-primary btn-large">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            </svg>
+                            Star on GitHub
+                        </a>
+                    </div>
+                </div>
             </div>
-        </footer>
+        </section>
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast hidden"></div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo">🎬</span>
+                    <span class="brand-text">Content Pipeline</span>
+                </div>
+                <p class="footer-desc">AI 短剧自动生产流水线 - 从故事梗概到完整视频的全流程自动化生成</p>
+                <div class="footer-links">
+                    <a href="https://github.com/kevin-claw-agent/content-pipeline" target="_blank" class="footer-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2025 Content Pipeline. Licensed under MIT.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    <script src="app.js"></script>
+    <script src="assets/app.js"></script>
 </body>
 </html>
