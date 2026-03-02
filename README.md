@@ -127,6 +127,47 @@ npm run test:coverage
 npm run test:watch
 ```
 
+## 🌿 Branch Strategy
+
+We use GitFlow branching model:
+
+```
+master     ← production releases (stable)
+  ↑
+develop    ← integration branch (latest features)
+  ↑
+test       ← staging environment
+  ↑
+feature/*  ← individual features
+```
+
+- **master**: Production-ready code, protected branch
+- **develop**: Integration branch for features
+- **test**: Staging environment for pre-production testing
+- **feature/**: New features (branch from develop)
+- **bugfix/**: Bug fixes
+- **hotfix/**: Critical production fixes
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed workflow.
+
+## 🚀 CI/CD
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| CI | PR to develop/master | Lint, type-check, test |
+| Test Suite | Push to develop/test/master | Unit & integration tests |
+| Release | Tag push | Build, push image, create release |
+| Deploy Staging | Merge to test | Deploy to staging |
+| Deploy Production | Tag push | Deploy to production |
+
+## 📚 Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) - System architecture details
+- [API Reference](docs/API.md) - API documentation
+- [Deployment](docs/DEPLOYMENT.md) - Deployment guide
+- [Contributing](CONTRIBUTING.md) - Contribution guidelines
+- [Release Process](RELEASE.md) - How to create releases
+
 ## 📝 License
 
 MIT

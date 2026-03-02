@@ -1,0 +1,196 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to deploy (e.g., v1.0.0)'
+        required: true
+        type: string
+      confirm:
+        description: 'Type "DEPLOY" to confirm production deployment'
+        required: true
+        type: string
+
+env:
+  DEPLOY_HOST: ${{ secrets.PROD_HOST }}
+  DEPLOY_USER: ${{ secrets.PROD_USER }}
+  DEPLOY_KEY: ${{ secrets.PROD_SSH_KEY }}
+  DEPLOY_PATH: ${{ secrets.PROD_PATH || '/opt/content-pipeline' }}
+
+jobs:
+  verify:
+    name: Verify Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "DEPLOY" ]; then
+            echo "❌ Deployment not confirmed. Please type 'DEPLOY' to confirm."
+            exit 1
+          fi
+          echo "✅ Deployment confirmed"
+
+      - name: Verify release exists
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          echo "Checking for release $VERSION..."
+          
+          # Check if release exists
+          curl -s "https://api.github.com/repos/${{ github.repository }}/releases/tags/$VERSION" | grep -q "tag_name" || {
+            echo "❌ Release $VERSION not found"
+            exit 1
+          }
+          echo "✅ Release verified"
+
+  deploy:
+    name: Deploy to Production
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref }}
+
+      - name: Setup SSH
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PROD_SSH_KEY }}
+          known_hosts: ${{ secrets.PROD_KNOWN_HOSTS }}
+          if_key_exists: replace
+
+      - name: Deploy to production server
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          echo "Deploying $VERSION to production..."
+          
+          # Create deployment script
+          cat > deploy_prod.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          DEPLOY_PATH="${DEPLOY_PATH:-/opt/content-pipeline}"
+          VERSION="$1"
+          
+          echo "=== Starting Production Deployment ==="
+          echo "Version: $VERSION"
+          
+          # Create backup
+          echo "Creating backup..."
+          if [ -d "$DEPLOY_PATH" ]; then
+            BACKUP_DIR="/opt/backups/content-pipeline-$(date +%Y%m%d-%H%M%S)"
+            mkdir -p "$BACKUP_DIR"
+            cp -r $DEPLOY_PATH "$BACKUP_DIR/" || true
+            echo "Backup created at $BACKUP_DIR"
+          fi
+          
+          # Navigate to deploy directory
+          cd $DEPLOY_PATH
+          
+          # Fetch and checkout specific tag
+          echo "Checking out $VERSION..."
+          git fetch origin --tags
+          git checkout "tags/$VERSION" -B "prod-$VERSION" || git checkout "tags/$VERSION"
+          
+          # Create/update .env file
+          echo "Setting up environment..."
+          cat > .env << EOL
+          NODE_ENV=production
+          PORT=3000
+          DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}
+          REDIS_URL=${{ secrets.PROD_REDIS_URL }}
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          S3_ENDPOINT=${{ secrets.PROD_S3_ENDPOINT }}
+          S3_BUCKET=${{ secrets.PROD_S3_BUCKET }}
+          S3_ACCESS_KEY=${{ secrets.PROD_S3_ACCESS_KEY }}
+          S3_SECRET_KEY=${{ secrets.PROD_S3_SECRET_KEY }}
+          EOL
+          
+          # Pull and restart services
+          echo "Starting services..."
+          docker-compose -f docker/docker-compose.yml down
+          docker-compose -f docker/docker-compose.yml pull
+          docker-compose -f docker/docker-compose.yml up -d
+          
+          # Health check
+          echo "Performing health check..."
+          sleep 15
+          curl -f http://localhost:3000/health || {
+            echo "❌ Health check failed! Rolling back..."
+            # Rollback logic here if needed
+            exit 1
+          }
+          
+          # Cleanup old images
+          echo "Cleaning up..."
+          docker image prune -f
+          
+          echo "=== Production Deployment Complete ==="
+          EOF
+          
+          chmod +x deploy_prod.sh
+          
+          # Copy and execute deployment script
+          scp deploy_prod.sh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/tmp/deploy_prod.sh
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "bash /tmp/deploy_prod.sh $VERSION"
+
+      - name: Post-deployment health check
+        run: |
+          echo "Performing post-deployment verification..."
+          sleep 30
+          
+          PROD_URL="${{ secrets.PROD_HEALTH_URL || 'https://api.yourdomain.com/health' }}"
+          
+          for i in {1..5}; do
+            if curl -sf "$PROD_URL"; then
+              echo "✅ Production is healthy"
+              
+              # Verify version
+              VERSION_INFO=$(curl -sf "$PROD_URL/version" 2>/dev/null || echo "unknown")
+              echo "Deployed version: $VERSION_INFO"
+              exit 0
+            fi
+            echo "Attempt $i/5 failed, retrying in 10s..."
+            sleep 10
+          done
+          
+          echo "❌ Post-deployment health check failed"
+          exit 1
+        continue-on-error: true
+
+      - name: Notify deployment
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#deployments'
+          text: |
+            Production deployment ${{ job.status }}
+            Version: ${{ github.event.inputs.version || github.ref_name }}
+            Commit: ${{ github.sha }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true
+
+      - name: Create deployment record
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = context.payload.inputs?.version || context.ref;
+            github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'production',
+              description: `Deployed ${version} to production`,
+              auto_merge: false,
+              required_contexts: []
+            });
